@@ -1,5 +1,7 @@
 #include <vector>
-
+#include <fstream>
+#include <iostream>
+#include <sstream>
 using namespace std;
 
 
@@ -12,6 +14,16 @@ struct Mpg {
 	double w;
 	double a;
 };
+
+Mpg uLimit, lLimit;
+
+void printTest(vector<Mpg> vec) {
+	for (int i = 0; i < vec.size(); ++i) {
+		cout << vec[i].mpg << " - " << vec[i].cyl << " - " << vec[i].dis
+			<< " - " << vec[i].hp << " - " << vec[i].w << " - " << vec[i].a
+			<< endl;
+	}
+}
 
 //********************************
 //normalize: normalizes the data using feature scaling
@@ -34,7 +46,7 @@ vector<Mpg> normalize(vector<Mpg> vec, Mpg uLimit, Mpg lLimit) {
 //returns a call to normalize
 //*******************
 vector<Mpg> bounds(vector<Mpg> vec) {
-	Mpg uLimit, lLimit;
+	
 	
 	lLimit.mpg = DBL_MAX;
 	lLimit.cyl = DBL_MAX;
@@ -85,10 +97,61 @@ vector<Mpg> bounds(vector<Mpg> vec) {
 int main() {
 	vector<Mpg> data;
 	vector<Mpg> nData; 
+	vector<Mpg> test;
+	vector<Mpg> nTest;
+	ifstream inFile;
+	Mpg temp;
+	string line;
+	string temp1;
 
+	inFile.open("linear_regression_data-1.txt");
 
+	while (getline(inFile, line)) {
+		
+		if (line.empty()) {
+			break;
+		}
 
+		istringstream iss(line);
 
+		if (line.at(0) == '?') {
+			getline(iss, temp1, '\t');
+			temp.mpg = -1;
+			getline(iss, temp1, '\t');
+			temp.cyl = stod(temp1);
+			getline(iss, temp1, '\t');
+			temp.dis = stod(temp1);
+			getline(iss, temp1, '\t');
+			temp.hp = stod(temp1);
+			getline(iss, temp1, '\t');
+			temp.w = stod(temp1);
+			getline(iss, temp1);
+			temp.a = stod(temp1);
 
+			test.push_back(temp);
+		}
+		else {
+			getline(iss, temp1, '\t');
+			temp.mpg = stod(temp1);
+			getline(iss, temp1, '\t');
+			temp.cyl = stod(temp1);
+			getline(iss, temp1, '\t');
+			temp.dis = stod(temp1);
+			getline(iss, temp1, '\t');
+			temp.hp = stod(temp1);
+			getline(iss, temp1, '\t');
+			temp.w = stod(temp1);
+			getline(iss, temp1);
+			temp.a = stod(temp1);
+			
+			data.push_back(temp);
+		}
+	}
+	
+	
+
+	
+
+	return 0;
 
 }
